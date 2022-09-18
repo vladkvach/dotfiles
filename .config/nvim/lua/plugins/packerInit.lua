@@ -22,8 +22,24 @@ if missing_packer > 0 then
         return false
     else
         print('Packer cloned successfully')
-        vim.api.nvim_command('packadd packer.nvim')
+        vim.api.nvim_command([[packadd packer.nvim]])
+
+        -- Autocommand that reloads neovim whenever you save the plugins.lua file
+        vim.cmd([[
+    augroup packer_user_config
+      autocmd!
+      autocmd BufWritePost plugins.lua source <afile> | PackerSync
+    augroup end
+  ]]     )
     end
 else
-    vim.api.nvim_command('packadd packer.nvim')
+    vim.api.nvim_command([[packadd packer.nvim]])
+
+    -- Autocommand that reloads neovim whenever you save the plugins.lua file
+    vim.cmd([[
+    augroup packer_user_config
+      autocmd!
+      autocmd BufWritePost plugins.lua source <afile> | PackerSync
+    augroup end
+  ]] )
 end

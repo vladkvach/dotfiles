@@ -7,8 +7,6 @@ else
     return false
 end
 
-local use = packer.use
-
 -- Have packer use a popup window
 packer.init({
     display = {
