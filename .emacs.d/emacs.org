@@ -1,0 +1,679 @@
+#+TITLE: Emacs Configuration
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el
+
+An attempt to collect everything necessary for comfortable work.
+
+* Table of Contents
+:PROPERTIES:
+:TOC:      :include all :ignore this
+:END:
+:CONTENTS:
+- [[#highlight-matching-braces][Highlight Matching Braces]]
+- [[#displaying-world-time][Displaying World Time]]
+- [[#pinentry][Pinentry]]
+- [[#tramp][TRAMP]]
+- [[#emacs-as-external-editor][Emacs as External Editor]]
+- [[#editing-configuration][Editing Configuration]]
+  - [[#tab-widths][Tab Widths]]
+  - [[#use-spaces-instead-of-tabs-for-indentation][Use spaces instead of tabs for indentation]]
+  - [[#commenting-lines][Commenting Lines]]
+  - [[#automatically-clean-whitespace][Automatically clean whitespace]]
+  - [[#use-parinfer-for-lispy-languages][Use Parinfer for Lispy languages]]
+  - [[#origamiel-for-folding][Origami.el for Folding]]
+- [[#completion-system][Completion System]]
+  - [[#preserve-minibuffer-history-with-savehist-mode][Preserve Minibuffer History with savehist-mode]]
+  - [[#completions-with-vertico][Completions with Vertico]]
+  - [[#completions-in-regions-with-corfu][Completions in Regions with Corfu]]
+  - [[#improved-candidate-filtering-with-orderless][Improved Candidate Filtering with Orderless]]
+  - [[#completions-with-icomplete][Completions with icomplete]]
+  - [[#consult-commands][Consult Commands]]
+  - [[#completion-annotations-with-marginalia][Completion Annotations with Marginalia]]
+  - [[#completion-actions-with-embark][Completion Actions with Embark]]
+  - [[#selectrum][Selectrum]]
+- [[#expand-region][Expand Region]]
+- [[#credential-management][Credential Management]]
+- [[#file-browsing][File Browsing]]
+  - [[#dired][Dired]]
+  - [[#opening-files-externally][Opening Files Externally]]
+- [[#org-mode][Org Mode]]
+  - [[#org-configuration][Org Configuration]]
+  - [[#workflow-configuration][Workflow Configuration]]
+  - [[#fonts-and-bullets][Fonts and Bullets]]
+  - [[#block-templates][Block Templates]]
+  - [[#protocol][Protocol]]
+  - [[#searching][Searching]]
+  - [[#bindings][Bindings]]
+  - [[#update-table-of-contents-on-save][Update Table of Contents on Save]]
+  - [[#calendar-sync][Calendar Sync]]
+  - [[#reminders][Reminders]]
+  - [[#presentations][Presentations]]
+    - [[#org-present][org-present]]
+    - [[#org-tree-slide][org-tree-slide]]
+  - [[#org-roam][Org Roam]]
+:END:
+* StartUp
+** Package Management
+#+begin_src emacs-lisp
+  (setq package-list '(shackle exwm desktop-environment company org ox-reveal which-key diminish magit
+                               rainbow-mode rainbow-delimiters ws-butler tramp web-mode impatient-mode
+                               pdf-tools flycheck git-commit git-messenger company-prescient no-littering auctex))
+
+  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("melpa" . "https://melpa.org/packages/")
+                           ("melpa-stable" . "https://stable.melpa.org/packages/")))
+
+  (package-initialize)
+
+  (unless package-archive-contents
+    (package-refresh-contents))
+
+  (dolist (package package-list)
+    (unless (package-installed-p package)
+      (package-install package)))
+#+end_src
+
+** Custom Elisp
+#+begin_src emacs-lisp
+  (defmacro defkeys (mapname &rest body)
+    `(let ((defs '(,@body)))
+       (while defs
+         (define-key ,mapname
+           (if (vectorp (car defs))
+               (car defs)
+             (read-kbd-macro (car defs)))
+           (if (or (listp (cadr defs)) (functionp (cadr defs)))
+               (cadr defs)
+             (if `(keymapp (bound-and-true-p ,(cadr defs)))
+                 (eval (cadr defs)))))
+         (setq defs (cddr defs)))))
+#+end_src
+
+** Start Emacs as a server
+#+begin_src emacs-lisp
+  (server-start)
+#+end_src
+
+** OS settings
+#+begin_src emacs-lisp
+  (defun win_setup ()
+    (if (not (file-exists-p "emacs.bat"))
+        (progn (with-temp-file "emacs.bat"
+                 (insert "@echo off\n\"C:\\Program Files (x86)\\emacs\\bin\\runemacs.exe\" -q -l \"C:\\.emacs.d\\init.el\""))
+               (setenv "PATH"
+                       (concat
+                        "C:\\Windows\\system32" path-separator
+                        "C:\\.emacs.d\\" path-separator
+                        ))
+               (shell-command (format "setx PATH %s"(getenv "PATH")))
+               )
+      )
+    )
+
+  (cond  ((string-equal system-type "windows-nt") 'win_setup)
+         ((string-equal system-type "darwin") nil)
+         ((string-equal system-type "gnu/linux") nil)
+         ((string-equal system-type "gnu/kfreebsd") nil)
+         ((string-equal system-type "berkeley-unix") nil)
+         ((string-equal system-type "cygwin") nil)
+         )
+#+end_src
+
+** Coding-system settings
+#+begin_src emacs-lisp
+  (setq-default coding-system-for-read    'utf-8)
+  (setq file-name-coding-system           'utf-8)
+  (set-selection-coding-system            'utf-8)
+  (set-keyboard-coding-system        'utf-8-unix)
+  (set-terminal-coding-system             'utf-8)
+  (prefer-coding-system                   'utf-8)
+#+end_src
+
+** Auto Mode Alist
+AssociationList that associates MajorModes with a pattern to match a buffer filename when it is first opened.
+#+begin_src emacs-lisp
+  (setq auto-mode-alist
+        (append '(("\\.txt$" . indented-text-mode)
+                  ("\\`/tmp/fol/" . text-mode)
+                  ("\\.texinfo\\'" . texinfo-mode)
+                  ("\\.texi\\'" . texinfo-mode)
+                  ("\\.el\\'" . emacs-lisp-mode)
+                  ("\\.c\\'" . c-mode)
+                  ("\\.h\\'" . c-mode)
+                  ("\\.js\\'" . web-mode)
+                  ("\\.html\\'" . web-mode)
+                  ("\\.djhtml\\'" . web-mode)
+                  ("\\.eco\\'" . web-mode)
+                  ("\\.hbs\\'" . web-mode)
+                  ("\\.handlebars\\'" . web-mode)
+                  ("\\.mustache\\'" . web-mode)
+                  ("\\.erb\\'" . web-mode)
+                  ("\\.eex\\'" . web-mode)
+                  ("\\.as[cp]x?\\'" . web-mode)
+                  ("\\.[gj]sp\\'" . web-mode)
+                  ("\\.htm\\'" . web-mode)
+                  ("\\.xml\\'" . web-mode)
+                  ("\\.twig\\'" . web-mode)
+                  ("\\.tpl\\.php\\'" . web-mode)
+                  ("\\.phtml\\'" . web-mode)
+                  ("\\.gen$" . gen-mode)
+                  ("\\.ms$" . fundamental-mode)
+                  ("\\.mm$" . objc-mode)
+                  ("\\.m$" . objc-mode)
+                  ("\\.sh\\'" . shell-script-mode)
+                  ("\\.jpe?g\\'" . image-mode)
+                  ("\\.bat\\'" . bat-mode)
+                  ("\\.[Bb][Aa][Tt]\\'" . bat-mode)
+                  ("\\.\\(BAT\\||bat\\)\\'" . bat-mode)
+                  ("_EDITMSG\\'" . log-entry-mode)
+                  ("/cvs[[:alnum:]]*\\'" . log-entry-mode))
+                auto-mode-alist))
+#+end_src
+
+* Keybinding
+** Panel (which-key)
+#+begin_src emacs-lisp
+  (require 'which-key)
+  (setq which-key-idle-delay 0.3)
+  (which-key-mode 1)
+#+end_src
+
+** ESC Cancels All
+#+begin_src emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+end_src
+
+* General Configuration
+** User Interface
+Make emacs more minimal.
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t
+        visible-bell t
+        next-line-add-newlines nil
+        truncate-partial-width-windows nil
+        ring-bell-function 'ignore
+        gc-cons-threshold 50000000)
+
+  (scroll-bar-mode -1)
+  (tool-bar-mode 0)
+  (tooltip-mode 0)
+  (set-fringe-mode 10)
+  (menu-bar-mode 0)
+  (display-time-mode t)
+  (display-battery-mode t)
+  (blink-cursor-mode 0)
+  (global-hl-line-mode 1)
+
+  (custom-set-variables
+   '(auto-save-default nil)
+   '(auto-save-interval 0)
+   '(auto-save-list-file-name nil)
+   '(auto-save-list-file-prefix nil)
+   '(auto-save-timeout 0)
+   '(delete-auto-save-files nil)
+   '(delete-old-versions (quote other))
+   '(kept-new-versions 5)
+   '(kept-old-versions 5)
+   '(make-backup-file-name-function (quote ignore))
+   '(make-backup-files nil)
+   '(mouse-wheel-progressive-speed nil)
+   '(mouse-wheel-scroll-amount (quote (15)))
+   '(version-control nil))
+
+  (setq undo-limit 20000000
+        undo-strong-limit 40000000)
+#+end_src
+Improve scrolling.
+#+begin_src emacs-lisp
+  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))
+        mouse-wheel-progressive-speed nil
+        mouse-wheel-follow-mouse 't
+        scroll-step 3
+        use-dialog-box nil)
+#+end_src
+Set frame transparency and maximize windows by default.
+#+begin_src emacs-lisp
+  (set-frame-parameter (selected-frame) 'fullscreen 'fullscreen)
+  (add-to-list 'default-frame-alist '(fullscreen . fullscreen))
+#+end_src
+Enable line numbers and customize their format.
+#+begin_src emacs-lisp
+  (column-number-mode)
+  (dolist (mode '(text-mode-hook
+                  prog-mode-hook
+                  conf-mode-hook
+                  org-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+#+end_src
+Don’t warn for large files (shows up when launching videos)
+#+begin_src emacs-lisp
+  (setq large-file-warning-threshold nil)
+#+end_src
+Don’t warn for following symlinked files
+#+begin_src emacs-lisp
+  (setq vc-follow-symlinks t)
+#+end_src
+Don’t warn when advice is added for functions
+#+begin_src emacs-lisp
+  (setq ad-redefinition-action 'accept)
+#+end_src
+Replacing tabs with spaces and setting indent width values to 4 units
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil
+                tab-always-indent nil
+                tab-width 4)
+#+end_src
+
+** Theme
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 110 :foreground "#fdf4c1" :background "#282828")
+  (set-face-attribute 'cursor t :background "#fdf4c1")
+  (set-face-attribute 'highlight t :background "#333333")
+  (set-face-attribute 'hl-line t :background "#333333")
+  (set-face-attribute 'fringe t :background "#282828")
+  (set-face-attribute 'mode-line t :foreground "#ece09f" :background "#1e1c1a")
+  (set-face-attribute 'region t :background "#504945")
+  (set-face-attribute 'secondary-selection t :background "#3e3834")
+  (set-face-attribute 'font-lock-builtin-face t :foreground "#fe8019")
+  (set-face-attribute 'font-lock-comment-face t :foreground "#7c6f64")
+  (set-face-attribute 'font-lock-function-name-face t :foreground "#a99865")
+  (set-face-attribute 'font-lock-keyword-face t :foreground "#dd6f48")
+  (set-face-attribute 'font-lock-string-face t :foreground "#429489")
+  (set-face-attribute 'font-lock-type-face t :foreground "#66999d")
+  (set-face-attribute 'font-lock-constant-face t :foreground "#bbaa97")
+  (set-face-attribute 'font-lock-variable-name-face t :foreground "#83a598")
+  (set-face-attribute 'minibuffer-prompt t :foreground "#75b45c" :bold t)
+  (set-face-attribute 'font-lock-warning-face t :foreground "#ff0000" :bold t)
+#+end_src
+
+** Mode Line
+Time format
+#+begin_src emacs-lisp
+  (customize-set-variable 'display-time-string-forms
+                          '((propertize (concat dayname
+                                                " " 12-hours ":" minutes " " (upcase am-pm)))))
+#+end_src
+
+Update display-time-string
+#+begin_src emacs-lisp
+  (display-time-update)
+#+end_src
+
+Remove display-time-string from global-mode-string
+#+begin_src emacs-lisp
+  (setq global-mode-string (delq 'display-time-string global-mode-string))
+#+end_src
+
+Remove battery-mode-line-string from global-mode-string
+#+begin_src emacs-lisp
+  (setq global-mode-string (delq 'battery-mode-line-string global-mode-string))
+#+end_src
+
+*** Basic Customization
+#+begin_src emacs-lisp
+  (defun mode-line-fill (reserve)
+    "Return empty space using FACE and leaving RESERVE space on the right."
+    (unless reserve
+      (setq reserve 20))
+    (when (and window-system
+               (eq 'right (get-scroll-bar-mode)))
+      (setq reserve (- reserve 3)))
+    (propertize " "
+                'display `((space :align-to (- (+ right right-fringe right-margin) ,reserve)))))
+
+  (customize-set-variable 'mode-line-format
+                          '("%e"
+                            mode-line-front-space
+                            mode-line-client
+                            mode-line-remote
+                            mode-line-mule-info
+                            mode-line-modified
+                            "  "
+                            ;; Buffer name
+                            (:propertize "%b " 'face nil)
+
+                            ;; line and column
+                            "["
+                            (:propertize "%l" 'face nil)
+                            ","
+                            (:propertize "%c" 'face nil)
+                            "]"
+
+                            ;; relative position, size of file
+                            "["
+                            (:propertize "%p" 'face nil)
+                            "/"
+                            (:propertize "%I" 'face nil)
+                            "] "
+
+                            ;; the current major mode for the buffer.
+                            "["
+                            (:propertize "%m" 'face nil
+                                         'help-echo buffer-file-coding-system)
+                            "] "
+
+                            "["
+                            ;; insert vs overwrite mode, input-method in a tooltip
+                            (:eval (propertize (if overwrite-mode "Ovr" "Ins")
+                                               'face nil))
+
+                            ;; was this buffer modified since the last save?
+                            (:eval (when (buffer-modified-p)
+                                     (concat "," (propertize "Mod"
+                                                             'face nil))))
+
+                            ;; is this buffer read-only?
+                            (:eval (when buffer-read-only
+                                     (concat "," (propertize "RO"
+                                                             'face nil))))
+                            "] "
+
+                            ;; Version control
+                            (:eval (when vc-mode
+                                     (concat " " vc-mode)))
+
+                            (:eval (mode-line-fill (+ (length battery-mode-line-string)
+                                                      3
+                                                      (length display-time-string))))
+                            battery-mode-line-string
+                            " "
+                            display-time-string
+                            ))
+#+end_src
+
+*** Enable Mode Diminishing
+#+begin_src emacs-lisp
+  (require 'diminish)
+
+  (diminish 'which-key-mode)
+  (diminish 'hungry-delete-mode)
+  (diminish 'beacon-mode)
+  (diminish 'rainbow-mode)
+  (diminish 'super-save-mode)
+  (diminish 'desktop-environment-mode)
+  (diminish 'visual-line-mode)
+  (diminish 'org-indent-mode)
+  (diminish 'ws-butler-mode)
+  (diminish 'buffer-face-mode)
+  (diminish 'eldoc-mode)
+  (diminish 'company-mode)
+#+end_src
+
+* Editing Configuration
+** Keep .emacs.d Clean
+Get rid of temporary files showing up as untracked in the Git repository.
+#+begin_src emacs-lisp
+  ;; Change the user-emacs-directory to keep unwanted things out of ~/.emacs.d
+  (setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
+        url-history-file (expand-file-name "url/history" user-emacs-directory))
+
+  ;; Use no-littering to automatically set common paths to the new user-emacs-directory
+  (require 'no-littering)
+
+  ;; Keep customization settings in a temporary file (thanks Ambrevar!)
+  (setq custom-file
+        (if (boundp 'server-socket-dir)
+            (expand-file-name "custom.el" server-socket-dir)
+          (expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
+  (load custom-file t)
+#+end_src
+
+** Automatically clean whitespace
+#+begin_src emacs-lisp
+  (require 'ws-butler)
+  (add-hook 'text-mode-hook 'ws-butler-mode)
+  (add-hook 'prog-mode-hook 'ws-butler-mode)
+#+end_src
+
+* Completion System
+** IDO
+#+begin_src emacs-lisp
+  (defadvice ido-find-file (after find-file-sudo activate)
+    "Find file as root if necessary."
+    (unless (and buffer-file-name
+                 (file-writable-p buffer-file-name))
+      (let* ((file-name (buffer-file-name))
+             (file-root (if (string-match "/ssh:\\([^:]+\\):\\(.*\\)" file-name)
+                            (concat "/ssh:"  (match-string 1 file-name)
+                                    "|doas:" (match-string 1 file-name)
+                                    ":"      (match-string 2 file-name))
+                          (concat "/doas:localhost:" file-name))))
+        (find-alternate-file file-root))))
+
+  (require 'ido)
+  (ido-mode 1)
+
+  (setq ido-everywhere t
+        ido-enable-flex-matching t
+        ido-create-new-buffer 'always
+        ido-default-file-method 'selected-window
+        ido-default-buffer-method 'selected-window)
+
+  (define-key (cdr ido-minor-mode-map-entry) [remap write-file] nil)
+  (global-set-key (kbd "C-x C-f") 'ido-find-file)
+#+end_src
+
+* Org Mode
+**  Org Configuration
+Set up Org Mode
+#+begin_src emacs-lisp
+  (setq-default fill-column 80)
+  (defun org_mode_setup ()
+    (org-indent-mode)
+    (variable-pitch-mode 1)
+    (auto-fill-mode 0)
+    (visual-line-mode 1)
+    (setq evil-auto-indent nil)
+    (diminish org-indent-mode))
+
+  (require 'org)
+  (add-hook 'org-mode-hook 'org_mode_setup)
+
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((emacs-lisp . t)))
+#+end_src
+
+**  Block Templates
+These templates allow you to create active code blocks
+#+begin_src emacs-lisp
+  (require 'org-tempo)
+  (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("em" . "src"))
+#+end_src
+
+** Org-Reveal
+Reveal.js is a tool for creating good-looking HTML presentations. Org-Reveal exports your Org documents to reveal.js presentations. With Org-reveal, you can create beautiful presentations with 3D effects from simple but powerful Org contents.
+#+begin_src emacs-lisp
+  (require 'ox-reveal)
+#+end_src
+
+** Auto-Reverting Changed Files
+#+begin_src emacs-lisp
+  (global-auto-revert-mode 1)
+#+end_src
+
+* Development
+Some custom hook
+#+begin_src emacs-lisp
+  ;; C++ mode handling
+  (defun source_format ()
+
+    (defun vk_source_format ()
+      "Format the given file as a source file."
+      (interactive)
+      (file-name-directory (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
+      (insert "//   ========================================================================\n")
+      (insert "//   $File: $\n")
+      (insert "//   $Date: $\n")
+      (insert "//   $Revision: $\n")
+      (insert "//   $Creator: Vladislav Kvach $\n")
+      (insert "//   ========================================================================\n\n\n"))
+
+
+    (cond ((file-exists-p buffer-file-name) t)
+          ((string-match "[.]cpp" buffer-file-name) (vk_source_format))))
+
+                                          ;(add-hook 'cpp-mode-hook 'source_format)
+#+end_src
+
+** Flycheck
+#+begin_src emacs-lisp
+  (require 'flycheck)
+#+end_src
+
+** HTML/CSS
+#+begin_src emacs-lisp
+  (require 'web-mode)
+
+  (require 'rainbow-mode)
+  (add-hook 'org-mode-hook 'rainbow-mode)
+  (add-hook 'web-mode-hook 'rainbow-mode)
+
+  (require 'impatient-mode)
+#+end_src
+** TRAMP (Transparent Remote Access, Multiple Protocols)
+#+begin_src emacs-lisp
+  (require 'tramp)
+  (setq tramp-default-method "ssh"
+        tramp-persistency-file-name (concat no-littering-var-directory "tramp")
+        tramp-auto-save-directory (concat no-littering-var-directory "tramp-autosave")
+        tramp-verbose 10
+        tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>] *\\(^[\\[[0-9;]*[a-zA-Z] *\\)*")
+  (tramp-set-completion-function "ssh" '((tramp-parse-sconfig "/etc/ssh_config")
+                                         (tramp-parse-sconfig "~/.ssh/config")))
+#+end_src
+** Git
+#+begin_src emacs-lisp
+  (require 'magit)
+  (require 'git-commit)
+  (require 'git-messenger)
+
+  (add-hook 'git-commit-mode-hook 'my-american-dict)
+
+  (setq git-messenger:show-detail t
+        git-messenger:use-magit-popup t)
+
+  (defkeys global-map
+    "C-x g" magit-status
+    "C-x M-g" magit-dispatch
+    "C-x G" git-messenger:popup-message)
+#+end_src
+
+** Company
+[[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
+
+We also use [[https://github.com/sebastiencs/company-box][company-box]] to further enhance the look of the completions with icons and better overall presentation.
+
+#+begin_src emacs-lisp
+  (require 'company)
+
+  (add-hook 'after-init-hook 'global-company-mode)
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "M->") 'company-select-last)
+  (define-key company-active-map (kbd "M-<") 'company-select-first)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous)
+  (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
+  (define-key prog-mode-map (kbd "<tab>") 'company-indent-or-complete-common)
+
+  (setq company-idle-delay 0.0
+        company-async-timeout 15
+        company-tooltip-align-annotations t
+        company-show-numbers t
+        company-global-modes '(not shell-mode eaf-mode)
+        company-require-match 'never
+        company-tooltip-align-annotations t
+        company-minimum-prefix-length 1)
+
+  (company-mode 1)
+
+  (with-eval-after-load 'company
+    (require 'company-prescient)
+    (company-prescient-mode 1))
+#+end_src
+
+* Productivity
+** PDF Tools
+PDF Tools is, among other things, a replacement of DocView for PDF files. The key difference is that pages are not pre-rendered by e.g. ghostscript and stored in the file-system, but rather created on-demand and stored in memory.
+#+begin_src emacs-lisp
+  (require 'pdf-tools)
+  (pdf-loader-install)
+
+  (setq pdf-misc-print-programm "/usr/bin/gtklp"
+        pdf-misc-print-programm-args (quote ("-o media=A4" "-o fitplot"))
+        pdf-view-display-size 'fit-page
+        pdf-view-midnight-colors '("white smoke" . "gray5"))
+#+end_src
+** Rainbow Delimiters
+#+begin_src emacs-lisp
+  (require 'rainbow-delimiters)
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+#+end_src
+
+** Rainbow Mode
+#+begin_src emacs-lisp
+  (require 'rainbow-mode)
+  (add-hook 'css-mode-hook 'rainbow-mode)
+#+end_src
+
+** Shackle
+Shackle gives you the means to put an end to popped up buffers not behaving they way you'd like them to. By setting up simple rules you can for instance make Emacs always select help buffers for you or make everything reuse your currently selected window.
+#+begin_src emacs-lisp
+  (require 'shackle)
+  (setq shackle-default-size 0.4
+        shackle-rules
+        '(("*Calendar*" :select t :size 0.3 :align below)
+          ("*Compile-Log*" :ignore t)
+          ("*Completions*" :size 0.3  :align t)
+          ("*Help*" :select t :inhibit-window-quit t :other t)
+          ("*Messages*" :select nil :inhibit-window-quit t :other t)
+          ("*Process List*" :select t :size 0.3 :align below)
+          ("*Python*" :select t :size 0.3 :align bellow)
+          ("*Shell Command Output*" :select nil)
+          ("*Warnings*" :ignore t)
+          ("*el-get bootstrap*" :ignore t)
+          ("*undo-tree*" :size 0.25 :align left)
+          ("\\*Async Shell.*\\*" :regexp t :ignore t)
+          ("\\*[Wo]*Man.*\\*" :regexp t :select t :inhibit-window-quit t :other t)
+          ("\\*poporg.*\\*" :regexp t :select t :other t)
+          ("\\*shell*\\*" :regexp t :same t :select t :other t)
+          ("\\`\\*ivy.*?\\*\\'" :regexp t :size 0.3 :align t)
+          ("edbi-dbviewer" :regexp t :select t :same t)
+          ("*edbi:query-result" :regexp t :size 0.8 :align bellow)
+          (occur-mode :select nil :align t)
+          (pdf-view-mode :other t)
+          (compilation-mode :select nil)
+          ("\\*Apropos\\|Help\\|Occur\\|tide-references\\*" :regexp t :same t :select t :inhibit-window-quit t)
+          ("\\*magit" :regexp t :same t :select t)
+          ("\\*PowerShell.*" :regexp t :same t :select t)
+          ("*go-guru-output*" :select t :same t)
+          ("*Proced*" :select t :same t)
+          ("\\*Pp Eval" :regexp t :same nil :select t :other t)
+          ("*slime-source*" :select nil :same nil :other t)
+          ("*slime-description*" :select nil :other t :inhibit-window-quit t)
+          ("\\*slime-repl" :regexp t :same nil :select nil :other t)
+          ("\\*sldb" :regexp t :other t :inhibit-window-quit t :select t)
+          ("\\*slime-compilation" :regexp t :same nil :select nil :other t)
+          ("*slime-scratch*" :same nil :select t :other t)
+          ("*ert*" :select nil :same nil :other t)
+          ("*sesman CIDER browser*" :inhibit-window-quit t :select t :same t)
+          ("\\*cider-repl" :regexp t :same nil :other t)
+          ("*Buffer List*" :select t :same t)))
+  (shackle-mode 1)
+#+end_src
+
+* LaTex
+** AucTex
+#+begin_src emacs-lisp
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+        TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
+        TeX-source-correlate-start-server t
+        TeX-auto-save t
+        TeX-parse-self t)
+
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer)
+
+  (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
+#+end_src
