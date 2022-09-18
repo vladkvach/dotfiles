@@ -1,2 +1,2 @@
 require('options')
-require('pluginList')
+require('plugins/init.lua')
