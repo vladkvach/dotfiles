@@ -5,13 +5,13 @@ local missing_packer = fn.empty(fn.glob(packer_path))
 if missing_packer > 0 then
     print("Cloning packer")
     fn.delete(packer_path, "rf")
-    fn.system({
-            'git',
-            'clone',
-            'https://github.com/wbthomason/packer.nvim',
-            '--depth',
-            '20',
-            packer_path
+    PACKER_BOOTSTRAP = fn.system({
+        'git',
+        'clone',
+        'https://github.com/wbthomason/packer.nvim',
+        '--depth',
+        '20',
+        packer_path
     })
     print("Installing packer close and reopen Neovim...")
     vim.cmd([[packadd packer.nvim]])
