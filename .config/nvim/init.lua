@@ -1,2 +1,4 @@
 require('settings/init')
-require('plugins/init')
+require('settings/mapping')
+require('plugins/packer')
+require('plugins/nvim-tree')

@@ -4,7 +4,6 @@ local function apply_options(scope, options)
     end
 end
 
-vim.g.mapleader = ' ' -- TODO: move this into mappings
 local options = {
     termguicolors = true, -- Enable 24 bits color in terminal
     guicursor = "a:block,i-ci-ve:ver25", -- Set the gui cursor to nothing for each mode
@@ -35,7 +34,9 @@ local window_options = {
 local global_options = {
     tex_flavor = 'latex',
     do_filetype_lua = 1,
-    did_load_filetpyes = 0
+    did_load_filetpyes = 0,
+    loaded = 1,
+    loaded_netrwPlugin = 1
 }
 
 apply_options(vim.o, options)
