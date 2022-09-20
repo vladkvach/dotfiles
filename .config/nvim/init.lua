@@ -1,2 +1,2 @@
-require('options')
+require('settings/init')
 require('plugins/init')
