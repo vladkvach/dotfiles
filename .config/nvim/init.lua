@@ -1,4 +1,4 @@
 require('settings/init')
-require('settings/mapping')
+require('settings/key_mapping')
 require('plugins/init')
 require('lsp_cfg/general')

@@ -1,1 +1,0 @@
-vim.g.mapleader = ' ' -- TODO: move this into mappings
