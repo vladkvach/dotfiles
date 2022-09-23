@@ -28,7 +28,7 @@ local packer = require('packer').startup(function(use)
   use 'scrooloose/nerdcommenter'
 
   -- status line
-  use 'glepnir/galaxyline.nvim'
+  use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
 
   -- show recent files on empty nvim command
   use 'mhinz/vim-startify'
@@ -87,7 +87,7 @@ end)
 local cfg_path = fn.stdpath('config')
 local fname_arr = vim.split(fn.glob(cfg_path .. '/lua/plugins/packages/*.lua'), '\n')
 
-for i, file in pairs(fname_arr) do
+for _, file in pairs(fname_arr) do
   require('plugins/packages/' .. file:gsub(cfg_path .. '/lua/plugins/packages/', ''):sub(1, -5))
 end
 
