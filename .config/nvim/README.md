@@ -2,7 +2,7 @@
 
 ```sh
 git clone https://github.com/vladkvach/dotfiles.git
-mv dotfiles/.config/nvim ~
+mv dotfiles/.config/nvim ~/.config/
 ```
 
 ## _Icons_
