@@ -85,7 +85,7 @@ end)
 
 -- plugin specific configs go here
 local cfg_path = fn.stdpath('config')
-local fname_arr = vim.split(fn.glob(cfg_path .. '/lua/plugins/packages/*.lua', '\n'))
+local fname_arr = vim.split(fn.glob(cfg_path .. '/lua/plugins/packages/*.lua'), '\n')
 
 for i, file in pairs(fname_arr) do
   require('plugins/packages/' .. file:gsub(cfg_path .. '/lua/plugins/packages/', ''):sub(1, -5))
