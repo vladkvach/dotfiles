@@ -1,6 +1,7 @@
+local fn = vim.fn
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+
 local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
   if fn.empty(fn.glob(install_path)) > 0 then
     fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
     vim.cmd [[packadd packer.nvim]]
@@ -83,16 +84,12 @@ local packer = require('packer').startup(function(use)
 end)
 
 -- plugin specific configs go here
-require('packages/barbar')
-require('packages/gitsigns')
-require('packages/indent-guide-lines')
-require('packages/lsp-colors')
-require('packages/lsp-trouble')
-require('packages/lsp-saga')
-require('packages/nvim-cmp')
-require('packages/nvim-tree')
-require('packages/nvim-treesitter')
-require('packages/telescope')
+local cfg_path = fn.stdpath('config')
+local fname_arr = vim.split(fn.glob(cfg_path .. '/lua/plugins/packages/*.lua', '\n'))
+
+for i, file in pairs(fname_arr) do
+  require('plugins/packages/' .. file:gsub(cfg_path .. '/lua/plugins/packages/', ''):sub(1, -5))
+end
 
 
 return packer
