@@ -14,7 +14,7 @@ static const char col_gray3[] = "#bbbbbb";
 static const char col_gray4[] = "#eeeeee";
 static const char col_cyan[] = "#005577";
 
-#include ".config/suckless/dwm/theme/gruvbox-medium.h"
+#include "theme/gruvbox-medium.h"
 
 /* tagging */
 static const char *tags[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};

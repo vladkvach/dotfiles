@@ -93,7 +93,7 @@ char *termname = "st-256color";
  */
 unsigned int tabspaces = 8;
 
-#include ".config/suckless/st/theme/gruvbox-medium.h"
+#include "theme/gruvbox-medium.h"
 
 /*
  * Default shape of cursor
