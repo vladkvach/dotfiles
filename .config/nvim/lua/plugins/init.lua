@@ -79,6 +79,9 @@ local packer = require('packer').startup(function(use)
   -- highlight variables under cursor
   use 'RRethy/vim-illuminate'
 
+  -- displaying the colours in the file
+  use 'norcalli/nvim-colorizer.lua'
+
   -- this will automatically install listed dependencies
   -- only the first time NeoVim is opened, because that's when Packer gets installed
   if packer_bootstrap then
