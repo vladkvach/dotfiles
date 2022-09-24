@@ -27,6 +27,9 @@ local packer = require('packer').startup(function(use)
   -- nerd commenter
   use 'scrooloose/nerdcommenter'
 
+  -- theme
+  use 'ellisonleao/gruvbox.nvim'
+
   -- status line
   use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
 
