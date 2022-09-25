@@ -13,9 +13,9 @@ Install one of the icon fonts listed [here](https://www.nerdfonts.com/). Just fo
 
 ## _Language Server_
 
-| **Language** | **Server** |
-|:------------:|:----------:|
-|      C++     |    ccls    |
-|    Python    |   Pyright  |
+| **Language** | **LSP impl** | **LSP client** |
+|:------------:|:------------:|:--------------:|
+|      C++     |    ccls      |       coc      |
+|    Python    |   Pyright    |       coc      |
 
 
