@@ -36,20 +36,6 @@ local packer = require('packer').startup(function(use)
   -- show recent files on empty nvim command
   use 'mhinz/vim-startify'
 
-  -- lsp config
-  use { 'neovim/nvim-lspconfig', 'williamboman/nvim-lsp-installer', }
-
-  -- for LSP autocompletion
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-path'
-  use 'hrsh7th/cmp-cmdline'
-  use 'hrsh7th/nvim-cmp'
-
-  -- For vsnip users.
-  use 'hrsh7th/cmp-vsnip'
-  use 'hrsh7th/vim-vsnip'
-
   -- TODO: prettify telescope vim, make it use regex & shorten the window
   -- telescope - searching / navigation
   use { 'nvim-telescope/telescope.nvim', requires = { { 'nvim-lua/plenary.nvim' } } }
@@ -64,17 +50,11 @@ local packer = require('packer').startup(function(use)
   -- prettier tabs
   use 'romgrk/barbar.nvim'
 
-  -- nice diagnostic pane on the bottom
-  use 'folke/lsp-trouble.nvim'
-
-  -- support the missing lsp diagnostic colors
-  use 'folke/lsp-colors.nvim'
-
-  -- better LSP UI (for code actions, rename etc.)
-  use 'tami5/lspsaga.nvim'
-
   -- show indentation levels
   use 'lukas-reineke/indent-blankline.nvim'
+
+  -- nodejs extension host
+  use { 'neoclide/coc.nvim', branch = 'release' }
 
   -- highlight variables under cursor
   use 'RRethy/vim-illuminate'
