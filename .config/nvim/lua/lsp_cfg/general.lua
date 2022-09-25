@@ -18,7 +18,7 @@ local function installServers(names)
 end
 
 -- find a list of available ones here: https://github.com/williamboman/nvim-lsp-installer
-installServers({ 'ccls', 'pyright', 'angularls', 'bashls', 'dockerls', 'sumneko_lua', 'jsonls', 'cssls' })
+installServers({ 'clangd', 'pyright', 'angularls', 'bashls', 'dockerls', 'sumneko_lua', 'jsonls', 'cssls' })
 
 -- setup installed servers
 lsp_installer.on_server_ready(function(server)
@@ -38,9 +38,9 @@ lsp_installer.on_server_ready(function(server)
         opts = vim.tbl_deep_extend('force', sumneko_lua_opts, opts)
     end
 
-    if server.name == 'ccls' then
-        local ccls_opts = require('lsp_cfg/servers/ccls')
-        opts = vim.tbl_deep_extend('force', ccls_opts, opts)
+    if server.name == 'clangd' then
+        local clangd_opts = require('lsp_cfg/servers/clangd')
+        opts = vim.tbl_deep_extend('force', clangd_opts, opts)
     end
 
     if server.name == 'pyright' then
