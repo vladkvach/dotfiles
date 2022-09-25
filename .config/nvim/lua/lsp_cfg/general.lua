@@ -38,6 +38,11 @@ lsp_installer.on_server_ready(function(server)
         opts = vim.tbl_deep_extend('force', sumneko_lua_opts, opts)
     end
 
+    if server.name == 'ccls' then
+        local ccls_opts = require('lsp_cfg/servers/ccls')
+        opts = vim.tbl_deep_extend('force', ccls_opts, opts)
+    end
+
     if server.name == 'pyright' then
         local pyright_opts = require('lsp_cfg/servers/pyright')
         opts = vim.tbl_deep_extend('force', pyright_opts, opts)
