@@ -65,6 +65,9 @@ local packer = require('packer').startup(function(use)
   -- displaying the colours in the file
   use 'norcalli/nvim-colorizer.lua'
 
+  -- The missing auto-completion for cmdline!
+  use { "gelguy/wilder.nvim", opt = true, setup = [[vim.cmd('packadd wilder.nvim')]] }
+
   -- this will automatically install listed dependencies
   -- only the first time NeoVim is opened, because that's when Packer gets installed
   if packer_bootstrap then
