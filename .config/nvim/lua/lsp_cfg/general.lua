@@ -1,14 +1,5 @@
-local lsp_installer = require('nvim-lsp-installer').setup({
-    automatic_installation = true,
-    ui = {
-        icons = {
-            server_installed = "✓",
-            server_pending = "➜",
-            server_uninstalled = "✗"
-        }
-    }
-})
 local lsp_installer_servers = require('nvim-lsp-installer.servers')
+local lsp_installer = require('nvim-lsp-installer')
 
 -- install LSP servers
 local function installServer(name)
@@ -31,7 +22,16 @@ installServers({ 'ccls', 'pyright', 'angularls', 'bashls', 'dockerls', 'sumneko_
 
 -- setup installed servers
 lsp_installer.on_server_ready(function(server)
-    local opts = {}
+    local opts = {
+        automatic_installation = true,
+        ui = {
+            icons = {
+                server_installed = "✓",
+                server_pending = "➜",
+                server_uninstalled = "✗"
+            }
+        }
+    }
 
     -- (optional) Customize the options passed to the server
     -- if server.name == "tsserver" then
