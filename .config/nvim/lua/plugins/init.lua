@@ -50,7 +50,7 @@ local packer = require('packer').startup(function(use)
   -- prettier tabs
   use { 'akinsho/bufferline.nvim', tag = 'v2.*', requires = 'kyazdani42/nvim-web-devicons' }
 
-  -- Lua
+  -- key information
   use { 'folke/which-key.nvim' }
 
   -- show indentation levels
@@ -66,7 +66,7 @@ local packer = require('packer').startup(function(use)
   use 'norcalli/nvim-colorizer.lua'
 
   -- The missing auto-completion for cmdline!
-  use { "gelguy/wilder.nvim", opt = true, setup = [[vim.cmd('packadd wilder.nvim')]] }
+  use 'gelguy/wilder.nvim'
 
   -- this will automatically install listed dependencies
   -- only the first time NeoVim is opened, because that's when Packer gets installed
