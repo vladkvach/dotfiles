@@ -48,7 +48,10 @@ local packer = require('packer').startup(function(use)
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 
   -- prettier tabs
-  use 'romgrk/barbar.nvim'
+  use { 'akinsho/bufferline.nvim', tag = 'v2.*', requires = 'kyazdani42/nvim-web-devicons' }
+
+  -- Lua
+  use { 'folke/which-key.nvim' }
 
   -- show indentation levels
   use 'lukas-reineke/indent-blankline.nvim'
