@@ -34,12 +34,12 @@ lsp_installer.on_server_ready(function(server)
     }
 
     if server.name == 'sumneko_lua' then
-        local sumneko_lua_opts = require('servers/sumneko_lua')
+        local sumneko_lua_opts = require('lsp_cfg/servers/sumneko_lua')
         opts = vim.tbl_deep_extend('force', sumneko_lua_opts, opts)
     end
 
     if server.name == 'pyright' then
-        local pyright_opts = require('servers/pyright')
+        local pyright_opts = require('lsp_cfg/servers/pyright')
         opts = vim.tbl_deep_extend('force', pyright_opts, opts)
     end
 
