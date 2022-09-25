@@ -1,4 +1,13 @@
-local lsp_installer = require('nvim-lsp-installer')
+local lsp_installer = require('nvim-lsp-installer').setup({
+    automatic_installation = true,
+    ui = {
+        icons = {
+            server_installed = "✓",
+            server_pending = "➜",
+            server_uninstalled = "✗"
+        }
+    }
+})
 local lsp_installer_servers = require('nvim-lsp-installer.servers')
 
 -- install LSP servers
