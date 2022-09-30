@@ -13,9 +13,10 @@ Install one of the icon fonts listed [here](https://www.nerdfonts.com/). Just fo
 
 ## _Language Server_
 
-| **Language** | **LSP impl** | **LSP client** |
-|:------------:|:------------:|:--------------:|
-|      C++     |    ccls      |       coc      |
-|    Python    |   Pyright    |       coc      |
+| **Language** |                                **LSP impl**                                |               **LSP client**                |
+| :----------: | :------------------------------------------------------------------------: | :-----------------------------------------: |
+|     C++      |             [coc-clangd](https://github.com/clangd/coc-clangd)             | [coc](https://github.com/neoclide/coc.nvim) |
+|    CMake     | [cmake-language-server](https://github.com/regen100/cmake-language-server) | [coc](https://github.com/neoclide/coc.nvim) |
+|    Python    |         [coc-pyright](https://github.com/fannheyward/coc-pyright)          | [coc](https://github.com/neoclide/coc.nvim) |
 
 

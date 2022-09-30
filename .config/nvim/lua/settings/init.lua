@@ -50,7 +50,8 @@ local global_options = {
     did_load_filetpyes = 0,
     loaded = 1,
     loaded_netrwPlugin = 1,
-    coc_global_extensions = { 'coc-pyright', 'coc-tsserver', 'coc-json', 'coc-git', 'coc-html', 'coc-css', 'coc-sh',
+    coc_global_extensions = { 'coc-clangd', 'coc-pyright', 'coc-tsserver', 'coc-json', 'coc-git', 'coc-html', 'coc-css',
+        'coc-sh',
         'coc-markdownlint' }
 }
 
