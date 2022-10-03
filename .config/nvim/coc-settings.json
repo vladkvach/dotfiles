@@ -6,14 +6,7 @@
                 "compile_flags.txt",
                 "compile_commands.json"
             ],
-            "filetypes": [
-                "c",
-                "cc",
-                "cpp",
-                "c++",
-                "objc",
-                "objcpp"
-            ]
+            "filetypes": [ "c", "objc" ]
         },
         "cmake": {
             "command": "cmake-language-server",
