@@ -474,6 +474,8 @@ Reveal.js is a tool for creating good-looking HTML presentations. Org-Reveal exp
 
 * File header formatting
 #+begin_src emacs-lisp
+; CC++ mode handling
+(defun vk_c_hook ()
   ; Abbrevation expansion
   (abbrev-mode 1)
 
@@ -519,6 +521,9 @@ Reveal.js is a tool for creating good-looking HTML presentations. Org-Reveal exp
     (cond ((file-exists-p buffer-file-name) t)
           ((string-match "[.]c" buffer-file-name) (vk_source_format))
           ((string-match "[.]h" buffer-file-name) (vk_header_format)))
+)
+
+(add-hook 'c-mode-common-hook 'vk_c_hook)
 #+end_src
 
 ** Flycheck
