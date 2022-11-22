@@ -55,8 +55,8 @@ An attempt to collect everything necessary for comfortable work.
 ** Package Management
 #+begin_src emacs-lisp
   (setq package-list '(shackle company org ox-reveal which-key diminish magit irony company-irony
-                               rainbow-mode rainbow-delimiters ws-butler tramp impatient-mode
-                               flycheck git-commit git-messenger company-prescient no-littering))
+                               irony-eldoc rainbow-mode rainbow-delimiters ws-butler impatient-mode
+                               tramp flycheck git-commit git-messenger company-prescient no-littering))
 
   (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                            ("elpa" . "https://elpa.gnu.org/packages/")
@@ -566,24 +566,6 @@ Reveal.js is a tool for creating good-looking HTML presentations. Org-Reveal exp
     "C-x G" git-messenger:popup-message)
 #+end_src
 
-**
-#+begin_src emacs-lisp
-(require 'irony)
-
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-(defun my-irony-mode-hook ()
-  (define-key irony-mode-map [remap completion-at-point]
-    'irony-completion-at-point-async)
-  (define-key irony-mode-map [remap complete-symbol]
-    'irony-completion-at-point-async))
-(add-hook 'irony-mode-hook 'my-irony-mode-hook)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-(irony-mode 1)
-#+end_src
-
 ** Company
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
 
@@ -613,9 +595,39 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
   (with-eval-after-load 'company
     (require 'company-prescient)
-    (require 'company-irony)
-    (company-irony-mode 1)
-    (company-prescient-mode 1))
+    (company-prescient-mode 1)
+    (require 'company-irony))
+#+end_src
+
+** Irony
+#+begin_src emacs-lisp
+(defun vk_irony_mode_hook ()
+  (define-key irony-mode-map [remap completion-at-point]
+    'irony-completion-at-point-async)
+  (define-key irony-mode-map [remap complete-symbol]
+    'irony-completion-at-point-async))
+(add-hook 'irony-mode-hook 'vk_irony_mode_hook)
+
+(require 'irony)
+
+;; If irony server was never installed, install it.
+(unless (irony--find-server-executable) (call-interactively #'irony-install-server))
+
+(add-hook 'c-mode-hook 'irony-mode)
+
+;; Use compilation database first, clang_complete as fallback.
+(setq-default irony-cdb-compilation-databases '(irony-cdb-libclang irony-cdb-clang-complete))
+
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+
+(irony-mode 1)
+#+end_src
+
+** Eldoc
+#+begin_src emacs-lisp
+(require 'irony-eldoc)
+(add-hook 'irony-mode-hook #'irony-eldoc)
+(irony-eldoc-mode 1)
 #+end_src
 
 ** Rainbow Delimiters
