@@ -54,7 +54,7 @@ An attempt to collect everything necessary for comfortable work.
 * StartUp
 ** Package Management
 #+begin_src emacs-lisp
-  (setq package-list '(shackle exwm desktop-environment company org ox-reveal which-key diminish magit
+  (setq package-list '(shackle company org ox-reveal which-key diminish magit
                                rainbow-mode rainbow-delimiters ws-butler tramp web-mode impatient-mode
                                pdf-tools flycheck git-commit git-messenger company-prescient no-littering auctex))
 
@@ -391,7 +391,6 @@ Remove battery-mode-line-string from global-mode-string
   (diminish 'beacon-mode)
   (diminish 'rainbow-mode)
   (diminish 'super-save-mode)
-  (diminish 'desktop-environment-mode)
   (diminish 'visual-line-mode)
   (diminish 'org-indent-mode)
   (diminish 'ws-butler-mode)
