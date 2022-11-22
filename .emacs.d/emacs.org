@@ -611,7 +611,10 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 (require 'irony)
 
 ;; If irony server was never installed, install it.
-(unless (irony--find-server-executable) (call-interactively #'irony-install-server))
+; (unless (irony--find-server-executable) (call-interactively #'irony-install-server))
+
+(if (string-match "/^(.*?(\bvld\b)[^$]*)$/gm" (irony--find-server-executable))
+  (call-interactively #'irony-install-server))
 
 (add-hook 'c-mode-hook 'irony-mode)
 
