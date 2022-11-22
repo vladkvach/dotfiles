@@ -472,28 +472,53 @@ Reveal.js is a tool for creating good-looking HTML presentations. Org-Reveal exp
   (global-auto-revert-mode 1)
 #+end_src
 
-* Development
-Some custom hook
+* File header formatting
 #+begin_src emacs-lisp
-  ;; C++ mode handling
-  (defun source_format ()
+  ; Abbrevation expansion
+  (abbrev-mode 1)
 
-    (defun vk_source_format ()
-      "Format the given file as a source file."
-      (interactive)
-      (file-name-directory (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
-      (insert "//   ========================================================================\n")
-      (insert "//   $File: $\n")
-      (insert "//   $Date: $\n")
-      (insert "//   $Revision: $\n")
-      (insert "//   $Creator: Vladislav Kvach $\n")
-      (insert "//   ========================================================================\n\n\n"))
+  (defun vk_header_format ()
+     "Format the given file as a header file."
+     (interactive)
+     (setq BaseFileName (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
+     (insert "#if !defined(")
+     (push-mark)
+     (insert BaseFileName)
+     (upcase-region (mark) (point))
+     (pop-mark)
+     (insert "_H)\n")
+     (insert "/* ========================================================================\n")
+     (insert " * $File: $\n")
+     (insert " * $Date: $\n")
+     (insert " * $Revision: $\n")
+     (insert " * $Creator: Vladislav Kvach $\n")
+     (insert " * ========================================================================\n")
+     (insert " */")
+     (insert "\n")
+     (insert "#define ")
+     (push-mark)
+     (insert BaseFileName)
+     (upcase-region (mark) (point))
+     (pop-mark)
+     (insert "_H\n")
+     (insert "#endif"))
 
+  (defun vk_source_format ()
+     "Format the given file as a source file."
+     (interactive)
+     (setq BaseFileName (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
+     (insert "/* ========================================================================\n")
+     (insert " * $File: $\n")
+     (insert " * $Date: $\n")
+     (insert " * $Revision: $\n")
+     (insert " * $Creator: Vladislav Kvach $\n")
+     (insert " * ========================================================================\n")
+     (insert " */")
+     (insert "\n"))
 
     (cond ((file-exists-p buffer-file-name) t)
-          ((string-match "[.]cpp" buffer-file-name) (vk_source_format))))
-
-                                          ;(add-hook 'cpp-mode-hook 'source_format)
+          ((string-match "[.]c" buffer-file-name) (vk_source_format))
+          ((string-match "[.]h" buffer-file-name) (vk_header_format)))
 #+end_src
 
 ** Flycheck
