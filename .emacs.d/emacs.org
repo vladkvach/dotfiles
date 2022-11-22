@@ -232,11 +232,6 @@ Improve scrolling.
         scroll-step 3
         use-dialog-box nil)
 #+end_src
-Set frame transparency and maximize windows by default.
-#+begin_src emacs-lisp
-  (set-frame-parameter (selected-frame) 'fullscreen 'fullscreen)
-  (add-to-list 'default-frame-alist '(fullscreen . fullscreen))
-#+end_src
 Enable line numbers and customize their format.
 #+begin_src emacs-lisp
   (column-number-mode)
