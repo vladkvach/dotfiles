@@ -55,7 +55,7 @@ An attempt to collect everything necessary for comfortable work.
 ** Package Management
 #+begin_src emacs-lisp
   (setq package-list '(shackle company org ox-reveal which-key diminish magit
-                               rainbow-mode rainbow-delimiters ws-butler tramp web-mode impatient-mode
+                               rainbow-mode rainbow-delimiters ws-butler tramp impatient-mode
                                pdf-tools flycheck git-commit git-messenger company-prescient no-littering auctex))
 
   (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
@@ -141,22 +141,6 @@ AssociationList that associates MajorModes with a pattern to match a buffer file
                   ("\\.el\\'" . emacs-lisp-mode)
                   ("\\.c\\'" . c-mode)
                   ("\\.h\\'" . c-mode)
-                  ("\\.js\\'" . web-mode)
-                  ("\\.html\\'" . web-mode)
-                  ("\\.djhtml\\'" . web-mode)
-                  ("\\.eco\\'" . web-mode)
-                  ("\\.hbs\\'" . web-mode)
-                  ("\\.handlebars\\'" . web-mode)
-                  ("\\.mustache\\'" . web-mode)
-                  ("\\.erb\\'" . web-mode)
-                  ("\\.eex\\'" . web-mode)
-                  ("\\.as[cp]x?\\'" . web-mode)
-                  ("\\.[gj]sp\\'" . web-mode)
-                  ("\\.htm\\'" . web-mode)
-                  ("\\.xml\\'" . web-mode)
-                  ("\\.twig\\'" . web-mode)
-                  ("\\.tpl\\.php\\'" . web-mode)
-                  ("\\.phtml\\'" . web-mode)
                   ("\\.gen$" . gen-mode)
                   ("\\.ms$" . fundamental-mode)
                   ("\\.mm$" . objc-mode)
@@ -519,11 +503,8 @@ Some custom hook
 
 ** HTML/CSS
 #+begin_src emacs-lisp
-  (require 'web-mode)
-
   (require 'rainbow-mode)
   (add-hook 'org-mode-hook 'rainbow-mode)
-  (add-hook 'web-mode-hook 'rainbow-mode)
 
   (require 'impatient-mode)
 #+end_src
