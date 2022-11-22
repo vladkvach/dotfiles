@@ -56,7 +56,7 @@ An attempt to collect everything necessary for comfortable work.
 #+begin_src emacs-lisp
   (setq package-list '(shackle company org ox-reveal which-key diminish magit
                                rainbow-mode rainbow-delimiters ws-butler tramp impatient-mode
-                               pdf-tools flycheck git-commit git-messenger company-prescient no-littering auctex))
+                               flycheck git-commit git-messenger company-prescient no-littering))
 
   (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                            ("elpa" . "https://elpa.gnu.org/packages/")
@@ -598,18 +598,6 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
     (company-prescient-mode 1))
 #+end_src
 
-* Productivity
-** PDF Tools
-PDF Tools is, among other things, a replacement of DocView for PDF files. The key difference is that pages are not pre-rendered by e.g. ghostscript and stored in the file-system, but rather created on-demand and stored in memory.
-#+begin_src emacs-lisp
-  (require 'pdf-tools)
-  (pdf-loader-install)
-
-  (setq pdf-misc-print-programm "/usr/bin/gtklp"
-        pdf-misc-print-programm-args (quote ("-o media=A4" "-o fitplot"))
-        pdf-view-display-size 'fit-page
-        pdf-view-midnight-colors '("white smoke" . "gray5"))
-#+end_src
 ** Rainbow Delimiters
 #+begin_src emacs-lisp
   (require 'rainbow-delimiters)
@@ -666,19 +654,4 @@ Shackle gives you the means to put an end to popped up buffers not behaving they
           ("\\*cider-repl" :regexp t :same nil :other t)
           ("*Buffer List*" :select t :same t)))
   (shackle-mode 1)
-#+end_src
-
-* LaTex
-** AucTex
-#+begin_src emacs-lisp
-  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-        TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
-        TeX-source-correlate-start-server t
-        TeX-auto-save t
-        TeX-parse-self t)
-
-  (add-hook 'TeX-after-compilation-finished-functions
-            #'TeX-revert-document-buffer)
-
-  (add-hook 'pdf-view-mode-hook (lambda() (linum-mode -1)))
 #+end_src
