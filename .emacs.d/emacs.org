@@ -267,7 +267,7 @@ Replacing tabs with spaces and setting indent width values to 4 units
   (set-face-attribute 'highlight t :background "#333333")
   (set-face-attribute 'hl-line t :background "#333333")
   (set-face-attribute 'fringe t :background "#282828")
-  (set-face-attribute 'mode-line t :foreground "#ece09f" :background "#1e1c1a")
+  (set-face-attribute 'mode-line t :foreground "#262626" :background "#FE8019")
   (set-face-attribute 'region t :background "#504945")
   (set-face-attribute 'secondary-selection t :background "#3e3834")
   (set-face-attribute 'font-lock-builtin-face t :foreground "#fe8019")
