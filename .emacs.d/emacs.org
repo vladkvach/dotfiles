@@ -627,7 +627,6 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 #+begin_src emacs-lisp
 (require 'irony-eldoc)
 (add-hook 'irony-mode-hook #'irony-eldoc)
-(irony-eldoc-mode 1)
 #+end_src
 
 ** Rainbow Delimiters
