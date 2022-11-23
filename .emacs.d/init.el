@@ -270,7 +270,7 @@
 (global-auto-revert-mode 1)
 
 ; C++ indentation style
-(defconst vk_c_style
+(defconst vk/c_style
   '((c-electric-pound-behavior   . nil)
     (c-tab-always-indent         . t)
     (c-comment-only-line-offset  . 0)
@@ -317,13 +317,10 @@
 (defun vk_c_hook ()
 
   ; Set my style for the current buffer
-  (c-add-style "vk_c_style" vk_c_style t)
+  (c-add-style "vk/c_style" vk/c_style t)
 
   ; Additional style stuff
   (c-set-offset 'member-init-intro '++)
-
-  ; No hungry backspace
-  (c-toggle-auto-hungry-state -1)
 
   ; Abbrevation expansion
   (abbrev-mode 1)
