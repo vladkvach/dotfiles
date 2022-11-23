@@ -1,5 +1,3 @@
-; (add-to-list 'load-path "~/.emacs.d/custom")
-
 (mapc 'load (file-expand-wildcards "~/.emacs.d/custom/*.el"))
 
 (require 'which-key)
