@@ -55,8 +55,8 @@ An attempt to collect everything necessary for comfortable work.
 ** Package Management
 #+begin_src emacs-lisp
   (setq package-list '(shackle company org ox-reveal which-key diminish magit irony company-irony
-                               irony-eldoc rainbow-mode rainbow-delimiters ws-butler impatient-mode
-                               tramp flycheck git-commit git-messenger company-prescient no-littering))
+                               irony-eldoc rtags cmake-ide rainbow-mode rainbow-delimiters ws-butler
+                               impatient-mode tramp flycheck git-commit git-messenger company-prescient no-littering))
 
   (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                            ("elpa" . "https://elpa.gnu.org/packages/")
@@ -599,36 +599,6 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
     (require 'company-irony))
 #+end_src
 
-** Irony
-#+begin_src emacs-lisp
-(defun vk_irony_mode_hook ()
-  (define-key irony-mode-map [remap completion-at-point]
-    'irony-completion-at-point-async)
-  (define-key irony-mode-map [remap complete-symbol]
-    'irony-completion-at-point-async))
-(add-hook 'irony-mode-hook 'vk_irony_mode_hook)
-
-(require 'irony)
-
-;; If irony server was never installed, install it.
-(unless (irony--find-server-executable) (call-interactively #'irony-install-server))
-
-(add-hook 'c-mode-hook 'irony-mode)
-
-;; Use compilation database first, clang_complete as fallback.
-(setq-default irony-cdb-compilation-databases '(irony-cdb-libclang irony-cdb-clang-complete))
-
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-(irony-mode 1)
-#+end_src
-
-** Eldoc
-#+begin_src emacs-lisp
-(require 'irony-eldoc)
-(add-hook 'irony-mode-hook #'irony-eldoc)
-#+end_src
-
 ** Rainbow Delimiters
 #+begin_src emacs-lisp
   (require 'rainbow-delimiters)
@@ -686,3 +656,6 @@ Shackle gives you the means to put an end to popped up buffers not behaving they
           ("*Buffer List*" :select t :same t)))
   (shackle-mode 1)
 #+end_src
+
+(load "~/.emacs.d/custom/c.el")
+(provide 'init)
