@@ -18,6 +18,8 @@
     (package-install package)))
 
 
+(add-to-list 'load-path "~/.emacs.d/custom")
+
 
 (defmacro defkeys (mapname &rest body)
   `(let ((defs '(,@body)))
@@ -546,7 +548,9 @@
 (shackle-mode 1)
 
 
-(load "~/.emacs.d/include/c.el")
-(load "~/.emacs.d/include/helm.el")
+(require 'c_setup)
+(require 'helm_setup)
+(require 'helm_gtags_setup)
+
 (provide 'init)
 ;;; init.el ends here
