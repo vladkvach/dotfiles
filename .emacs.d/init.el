@@ -1,6 +1,6 @@
 (server-start)
 
-(setq package-list '(shackle diminish rainbow-delimiters ws-butler tramp flycheck no-littering))
+(setq package-list '(diminish rainbow-delimiters ws-butler tramp flycheck no-littering))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("elpa" . "https://elpa.gnu.org/packages/")
@@ -27,6 +27,25 @@
 ;; Change the user-emacs-directory to keep unwanted things out of ~/.emacs.d
 (setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
       url-history-file (expand-file-name "url/history" user-emacs-directory))
+
+; OS settings
+(defun win_setup ()
+  (if (not (file-exists-p "emacs.bat"))
+      (progn (with-temp-file "emacs.bat"
+               (insert "@echo off\n\"C:\\Program Files (x86)\\emacs\\bin\\runemacs.exe\" -q -l \"C:\\.emacs.d\\init.el\""))
+             (setenv "PATH"
+                     (concat
+                      "C:\\Windows\\system32" path-separator
+                      "C:\\.emacs.d\\" path-separator
+                      ))
+             (shell-command (format "setx PATH %s"(getenv "PATH"))))))
+
+(cond  ((string-equal system-type "windows-nt") 'win_setup)
+       ((string-equal system-type "darwin") nil)
+       ((string-equal system-type "gnu/linux") nil)
+       ((string-equal system-type "gnu/kfreebsd") nil)
+       ((string-equal system-type "berkeley-unix") nil)
+       ((string-equal system-type "cygwin") nil))
 
 (setq auto-mode-alist
       (append '(("\\.txt$" . indented-text-mode)
@@ -297,8 +316,7 @@
 
   (cond ((file-exists-p buffer-file-name) t)
         ((string-match "[.]c" buffer-file-name) (vk_source_format))
-        ((string-match "[.]h" buffer-file-name) (vk_header_format)))
-  )
+        ((string-match "[.]h" buffer-file-name) (vk_header_format))))
 
 (add-hook 'c-mode-common-hook 'vk_c_hook)
 
@@ -318,62 +336,18 @@
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
-(require 'shackle)
-(setq shackle-default-size 0.4
-      shackle-rules
-      '(("*Calendar*" :select t :size 0.3 :align below)
-        ("*Compile-Log*" :ignore t)
-        ("*Completions*" :size 0.3  :align t)
-        ("*Help*" :select t :inhibit-window-quit t :other t)
-        ("*Messages*" :select nil :inhibit-window-quit t :other t)
-        ("*Process List*" :select t :size 0.3 :align below)
-        ("*Python*" :select t :size 0.3 :align bellow)
-        ("*Shell Command Output*" :select nil)
-        ("*Warnings*" :ignore t)
-        ("*el-get bootstrap*" :ignore t)
-        ("*undo-tree*" :size 0.25 :align left)
-        ("\\*Async Shell.*\\*" :regexp t :ignore t)
-        ("\\*[Wo]*Man.*\\*" :regexp t :select t :inhibit-window-quit t :other t)
-        ("\\*poporg.*\\*" :regexp t :select t :other t)
-        ("\\*shell*\\*" :regexp t :same t :select t :other t)
-        ("\\`\\*ivy.*?\\*\\'" :regexp t :size 0.3 :align t)
-        ("edbi-dbviewer" :regexp t :select t :same t)
-        ("*edbi:query-result" :regexp t :size 0.8 :align bellow)
-        (occur-mode :select nil :align t)
-        (pdf-view-mode :other t)
-        (compilation-mode :select nil)
-        ("\\*Apropos\\|Help\\|Occur\\|tide-references\\*" :regexp t :same t :select t :inhibit-window-quit t)
-        ("\\*magit" :regexp t :same t :select t)
-        ("\\*PowerShell.*" :regexp t :same t :select t)
-        ("*go-guru-output*" :select t :same t)
-        ("*Proced*" :select t :same t)
-        ("\\*Pp Eval" :regexp t :same nil :select t :other t)
-        ("*slime-source*" :select nil :same nil :other t)
-        ("*slime-description*" :select nil :other t :inhibit-window-quit t)
-        ("\\*slime-repl" :regexp t :same nil :select nil :other t)
-        ("\\*sldb" :regexp t :other t :inhibit-window-quit t :select t)
-        ("\\*slime-compilation" :regexp t :same nil :select nil :other t)
-        ("*slime-scratch*" :same nil :select t :other t)
-        ("*ert*" :select nil :same nil :other t)
-        ("*sesman CIDER browser*" :inhibit-window-quit t :select t :same t)
-        ("\\*cider-repl" :regexp t :same nil :other t)
-        ("*Buffer List*" :select t :same t)))
-(shackle-mode 1)
-
 ; Navigation
 (defun previous-blank-line ()
   "Moves to the previous line containing nothing but whitespace."
   (interactive)
-  (search-backward-regexp "^[ \t]*\n")
-)
+  (search-backward-regexp "^[ \t]*\n"))
 
 (defun next-blank-line ()
   "Moves to the next line containing nothing but whitespace."
   (interactive)
   (forward-line)
   (search-forward-regexp "^[ \t]*\n")
-  (forward-line -1)
-)
+  (forward-line -1))
 
 (define-key global-map [C-up] 'previous-blank-line)
 (define-key global-map [C-down] 'next-blank-line)
