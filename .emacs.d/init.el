@@ -1,12 +1,15 @@
+;;; package --- Summary
+;;; Commentary:
+;;; init.el
+;;; Code:
+
 (server-start)
 
 (setq package-list '(diminish rainbow-delimiters ws-butler tramp flycheck no-littering))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("elpa" . "https://elpa.gnu.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("melpa" . "https://melpa.org/packages/")
-                         ("melpa-stable" . "https://stable.melpa.org/packages/")))
+                         ("melpa" . "https://melpa.org/packages/")))
 
 (package-initialize)
 
@@ -351,3 +354,7 @@
 
 (define-key global-map [C-up] 'previous-blank-line)
 (define-key global-map [C-down] 'next-blank-line)
+
+(provide 'init)
+
+;;; init.el ends here
