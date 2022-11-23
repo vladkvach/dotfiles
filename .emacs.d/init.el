@@ -1,4 +1,4 @@
-(setq package-list '(shackle company org ox-reveal which-key diminish magit irony company-irony
+(setq package-list '(shackle company helm org ox-reveal which-key diminish magit irony company-irony
                              irony-eldoc rtags cmake-ide rainbow-mode rainbow-delimiters ws-butler
                              impatient-mode tramp flycheck git-commit git-messenger company-prescient no-littering))
 
@@ -547,5 +547,6 @@
 
 
 (load "~/.emacs.d/include/c.el")
+(load "~/.emacs.d/include/helm.el")
 (provide 'init)
 ;;; init.el ends here
