@@ -1,5 +1,5 @@
 (setq package-list '(shackle company helm org ox-reveal which-key diminish magit irony company-irony
-                             irony-eldoc rtags cmake-ide rainbow-mode rainbow-delimiters ws-butler
+                             irony-eldoc helm-gtags company-c-headers rtags cmake-ide rainbow-mode rainbow-delimiters ws-butler
                              impatient-mode tramp flycheck git-commit git-messenger company-prescient no-littering))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
