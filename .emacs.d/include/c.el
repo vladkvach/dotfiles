@@ -1,3 +1,5 @@
+;;; c.el --- c/c++ mode  
+
 (defun vk_irony_mode_hook ()
   (define-key irony-mode-map [remap completion-at-point]
     'irony-completion-at-point-async)
@@ -41,3 +43,4 @@
 (cmake-ide-setup)
 
 (provide 'c)
+;;; c.el ends here
