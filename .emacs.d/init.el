@@ -338,22 +338,6 @@
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
-; Navigation
-(defun previous-blank-line ()
-  "Move to the previous line containing nothing but whitespace."
-  (interactive)
-  (search-backward-regexp "^[ \t]*\n"))
-
-(defun next-blank-line ()
-  "Move to the next line containing nothing but whitespace."
-  (interactive)
-  (forward-line)
-  (search-forward-regexp "^[ \t]*\n")
-  (forward-line -1))
-
-(define-key global-map [C-up] 'previous-blank-line)
-(define-key global-map [C-down] 'next-blank-line)
-
 (provide 'init)
 
 ;;; init.el ends here
