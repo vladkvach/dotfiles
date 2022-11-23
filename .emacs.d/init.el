@@ -546,6 +546,6 @@
   (shackle-mode 1)
 
 
-(load "./include/c.el")
+(load "~/.emacs.d/include/c.el")
 (provide 'init)
 ;;; init.el ends here
