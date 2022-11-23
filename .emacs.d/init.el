@@ -153,7 +153,6 @@
                         '((propertize (concat dayname
                                               " " 12-hours ":" minutes " " (upcase am-pm)))))
 
-(display-time-update)
 (setq global-mode-string (delq 'display-time-string global-mode-string))
 (setq global-mode-string (delq 'battery-mode-line-string global-mode-string))
 
@@ -341,12 +340,12 @@
 
 ; Navigation
 (defun previous-blank-line ()
-  "Moves to the previous line containing nothing but whitespace."
+  "Move to the previous line containing nothing but whitespace."
   (interactive)
   (search-backward-regexp "^[ \t]*\n"))
 
 (defun next-blank-line ()
-  "Moves to the next line containing nothing but whitespace."
+  "Move to the next line containing nothing but whitespace."
   (interactive)
   (forward-line)
   (search-forward-regexp "^[ \t]*\n")
