@@ -5,7 +5,7 @@
 
 (server-start)
 
-(setq package-list '(diminish rainbow-delimiters ws-butler tramp lsp-mode consult vertico orderless company flycheck))
+(setq package-list '(diminish rainbow-delimiters ws-butler tramp lsp-mode lsp-ui consult vertico orderless company flycheck))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("elpa" . "https://elpa.gnu.org/packages/")
@@ -383,6 +383,13 @@
 
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+
+(require 'orderless)
+(setq completion-styles '(orderless basic)
+      completion-category-overrides '((file (styles basic partial-completion))))
+
+(require 'consult)
+(setq completion-styles '(substring basic))
 
 (provide 'init)
 
