@@ -5,7 +5,7 @@
 
 (server-start)
 
-(setq package-list '(diminish rainbow-delimiters ws-butler tramp flycheck))
+(setq package-list '(diminish rainbow-delimiters ws-butler tramp lsp-mode consult vertico orderless company flycheck))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("elpa" . "https://elpa.gnu.org/packages/")
