@@ -20,6 +20,26 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+(defun recursive-subdirs (directory &optional withroot)
+  "Return a unsorted list of names of directories in DIRECTORY recursively.
+If WITHROOT is non-nil, also DIRECTORY will be include."
+  (let (subdirs)
+    (dolist (element (directory-files-and-attributes directory nil nil nil))
+      (let* ((path (car element))
+             (isdir (car (cdr element)))
+             (ignore (or (string= path ".") (string= path ".."))))
+        (if (and (eq isdir t) (not ignore))
+            (let ((dir (concat directory "/" path)))
+              (setq subdirs (append (cons dir subdirs)
+                                    (recursive-subdirs dir)))))))
+    (if (not (eq withroot nil))
+        (add-to-list 'subdirs directory))
+    subdirs))
+
+(dolist (dir (recursive-subdirs "~/.emacs.d/config" t))
+  (dolist (file (directory-files dir t "\.el$" nil))
+    (load (file-name-sans-extension file))))
+
 (setq-default coding-system-for-read    'utf-8)
 (setq file-name-coding-system           'utf-8)
 (set-selection-coding-system            'utf-8)
