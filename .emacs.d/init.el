@@ -31,7 +31,7 @@
 (setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
       url-history-file (expand-file-name "url/history" user-emacs-directory))
 
-; OS settings
+;; OS settings
 (defun win_setup ()
   (if (not (file-exists-p "emacs.bat"))
       (progn (with-temp-file "emacs.bat"
@@ -269,7 +269,7 @@
 
 (global-auto-revert-mode 1)
 
-; C++ indentation style
+;; C++ indentation style
 (defconst vk/c_style
   '((c-electric-pound-behavior   . nil)
     (c-tab-always-indent         . t)
@@ -313,7 +313,7 @@
                                     (brace-list-intro      .  4)))
     (c-echo-syntactic-information-p . t)))
 
-; CC++ mode handling
+;; CC++ mode handling
 (defun vk_c_hook ()
   "Source Initialization Hook."
 
