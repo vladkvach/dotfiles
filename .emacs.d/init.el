@@ -315,14 +315,15 @@
 
 ; CC++ mode handling
 (defun vk_c_hook ()
+  "Source Initialization Hook."
 
-  ; Set my style for the current buffer
+  ;; Set my style for the current buffer
   (c-add-style "vk/c_style" vk/c_style t)
 
-  ; Additional style stuff
+  ;; Additional style stuff
   (c-set-offset 'member-init-intro '++)
 
-  ; Abbrevation expansion
+  ;; Abbrevation expansion
   (abbrev-mode 1)
 
   (defun vk_header_format ()
