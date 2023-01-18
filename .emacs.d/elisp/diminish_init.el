@@ -1,0 +1,7 @@
+(require 'diminish)
+(diminish 'hungry-delete-mode)
+(diminish 'beacon-mode)
+(diminish 'super-save-mode)
+(diminish 'visual-line-mode)
+(diminish 'ws-butler-mode)
+(diminish 'buffer-face-mode)
