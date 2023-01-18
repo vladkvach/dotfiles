@@ -40,7 +40,7 @@ If WITHROOT is non-nil, also DIRECTORY will be include."
   (dolist (file (directory-files dir t "\.el$" nil))
     (load (file-name-sans-extension file))))
 
-(defadvice ido-find-file (after find-file-sudo activate)
+(defadvice find-file (after find-file-sudo activate)
   "Find file as root if necessary."
   (unless (and buffer-file-name
                (file-writable-p buffer-file-name))
