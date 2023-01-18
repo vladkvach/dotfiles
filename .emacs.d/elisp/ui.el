@@ -1,7 +1,6 @@
 (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 110 :foreground "#fdf4c1" :background "#282828")
 (set-face-attribute 'cursor t :background "#fdf4c1")
 (set-face-attribute 'highlight t :background "#333333")
-(set-face-attribute 'hl-line t :background "#333333")
 (set-face-attribute 'fringe t :background "#282828")
 (set-face-attribute 'mode-line t :foreground "#262626" :background "#FE8019")
 (set-face-attribute 'region t :background "#504945")
