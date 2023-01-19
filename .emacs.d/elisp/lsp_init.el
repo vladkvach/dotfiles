@@ -3,7 +3,8 @@
 (setq company-idle-delay 0.0
       company-minimum-prefix-length 1
       lsp-idle-delay 0.1
-      lsp-enable-which-key-integration t)
+      lsp-enable-which-key-integration t
+      lsp-headerline-breadcrumb-enable nil)
 
 (add-hook 'c-mode-hook #'lsp)
 (add-hook 'js-mode-hook #'lsp)
