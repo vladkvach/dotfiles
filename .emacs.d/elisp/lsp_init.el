@@ -1,0 +1,16 @@
+(require 'lsp-mode)
+
+(setq lsp-enable-completion-at-point nil)
+(setq lsp-enable-which-key-integration t)
+(setq lsp-idle-delay 0.500)
+
+(add-hook 'c-mode-hook #'lsp)
+(add-hook 'js-mode-hook #'lsp)
+(add-hook 'c++-mode-hook #'lsp)
+(add-hook 'css-mode-hook #'lsp)
+(add-hook 'html-mode-hook #'lsp)
+(add-hook 'json-mode-hook #'lsp)
+(add-hook 'yaml-mode-hook #'lsp)
+(add-hook 'shell-mode-hook #'lsp)
+(add-hook 'python-mode-hook #'lsp)
+(add-hook 'dockerfile-mode-hook #'lsp)
