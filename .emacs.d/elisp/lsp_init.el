@@ -2,6 +2,7 @@
 
 (setq company-idle-delay 0.1
       company-minimum-prefix-length 1
+      lsp-enable-symbol-highlighting nil
       lsp-enable-which-key-integration t
       lsp-headerline-breadcrumb-enable nil
       lsp-headerline-breadcrumb-enable nil
@@ -9,13 +10,10 @@
       lsp-modeline-diagnostics-enable nil
       lsp-semantic-tokens-enable t ;; hide unreachable ifdefs
       ;; LSP UI related tweaks
-      lsp-ui-sideline-enable nil
       lsp-ui-doc-show-with-cursor t
       lsp-ui-doc-show-with-mouse nil
       lsp-ui-sideline-show-hover nil
-      lsp-ui-sideline-show-symbol nil
-      lsp-ui-sideline-show-diagnostics nil
-      lsp-ui-sideline-show-code-actions nil)
+      lsp-ui-sideline-show-symbol nil)
 
 (add-hook 'c-mode-hook #'lsp)
 (add-hook 'js-mode-hook #'lsp)
