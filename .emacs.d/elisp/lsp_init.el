@@ -5,7 +5,6 @@
       lsp-enable-symbol-highlighting nil
       lsp-enable-which-key-integration t
       lsp-headerline-breadcrumb-enable nil
-      lsp-headerline-breadcrumb-enable nil
       lsp-modeline-code-actions-enable nil
       lsp-modeline-diagnostics-enable nil
       lsp-semantic-tokens-enable t ;; hide unreachable ifdefs
