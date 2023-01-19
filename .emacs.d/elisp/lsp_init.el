@@ -1,8 +1,9 @@
 (require 'lsp-mode)
 
-(setq lsp-enable-completion-at-point nil)
-(setq lsp-enable-which-key-integration t)
-(setq lsp-idle-delay 0.500)
+(setq company-idle-delay 0.0
+      company-minimum-prefix-length 1
+      lsp-idle-delay 0.1
+      lsp-enable-which-key-integration t)
 
 (add-hook 'c-mode-hook #'lsp)
 (add-hook 'js-mode-hook #'lsp)
