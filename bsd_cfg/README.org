@@ -1,0 +1,2 @@
+*** Cloning a file with the 'fetch' utility:
+*fetch -o setup.sh https://raw.github.com/vladkvach/bsd_cfg/main/setup.sh*
