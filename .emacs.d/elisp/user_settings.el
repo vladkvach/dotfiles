@@ -41,6 +41,7 @@
 
 (setq-default truncate-lines t)
 (split-window-horizontally)
+(add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
 
 (scroll-bar-mode -1)
 (tool-bar-mode 0)
