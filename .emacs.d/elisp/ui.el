@@ -1,1 +1,1 @@
-(gruvbox-dark-hard)
+(load-theme 'gruvbox-dark-hard t)
