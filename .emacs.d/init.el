@@ -5,7 +5,7 @@
 
 (server-start)
 
-(setq package-list '(diminish rainbow-delimiters ws-butler tramp lsp-mode lsp-ui marginalia consult vertico orderless company flycheck which-key format-all gruvbox-theme))
+(setq package-list '(diminish rainbow-delimiters ws-butler tramp lsp-mode lsp-ui cmake-mode marginalia consult vertico orderless company flycheck which-key format-all gruvbox-theme))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("elpa" . "https://elpa.gnu.org/packages/")
